@@ -1,0 +1,30 @@
+{
+	"link":[
+		{
+			"name":"menu.link.dashboard",
+			"url":"/module/module_baas/index.php",
+			"target":"main",
+			"default":"true"
+		},
+		{
+			"name":"menu.link.report_week",
+			"url":"/module/module_baas/report_week.php",
+			"target":"main"
+		},
+		{
+			"name":"menu.link.report_month",
+			"url":"/module/module_baas/report_month.php",
+			"target":"main"
+		},
+		{
+			"name":"menu.link.report_history",
+			"url":"/module/module_baas/report_history.php",
+			"target":"main"
+		},
+		{
+			"name":"menu.link.support",
+			"url":"/module/module_baas/support.php",
+			"target":"main"
+		}
+	]
+}

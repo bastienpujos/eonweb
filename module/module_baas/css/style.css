@@ -1,0 +1,42 @@
+/*
+#
+# vConso BAAS
+#
+# Copyright (c) 2017 AXIANS Cloud Builder
+# Author: Jean-Philippe Levy <jean-philippe.levy@axians.com>
+#
+*/
+
+/*
+ * ------------------------------------------------------------------------
+ * Datatable responsive
+ * ------------------------------------------------------------------------
+*/
+
+.datatable-baas {
+	border-spacing : 0 !important;
+	width: 100% !important;
+	display: none;
+}
+
+/*
+ * ------------------------------------------------------------------------
+ * Status code colors
+ * ------------------------------------------------------------------------
+*/
+
+.bg-green{
+	background-color: #5CB85C;
+}
+.bg-yellow{
+	background-color: #FEFF81;
+}
+.bg-orange{
+	background-color: #F0AD4E;
+}
+.bg-red{
+	background-color: #D9534F;
+}
+.bg-black{
+	background-color: #4D4038;
+}
