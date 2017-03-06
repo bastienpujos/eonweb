@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2016 EyesOfNetwork Team
 # DEV NAME : Jean-Philippe LEVY
-# VERSION : 5.0
+# VERSION : 5.1
 # APPLICATION : eonweb for eyesofnetwork project
 #
 # LICENCE :
@@ -188,7 +188,7 @@ function insert_group($group_name,$group_descr,$group_type,$ldap_group_name)
 		$group_dn = "";
 		$group_ldap=sqlrequest("$database_eonweb","SELECT dn from ldap_groups_extended where group_name='$group_name';");
 		if(mysqli_num_rows($group_ldap) > 0){
-			$group_dn = mysqli_result($group_ldap,0);
+			$group_dn = ldap_escape(mysqli_result($group_ldap,0));
 		}
 		if($group_dn == ""){
 			$group_type = 0;

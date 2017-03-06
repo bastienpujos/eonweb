@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2016 EyesOfNetwork Team
 # DEV NAME : Jean-Philippe LEVY
-# VERSION : 5.0
+# VERSION : 5.1
 # APPLICATION : eonweb for eyesofnetwork project
 #
 # LICENCE :
@@ -103,7 +103,7 @@ include("../../side.php");
 				$user_password1 = "abcdefghijklmnopqrstuvwxyz";
 				$user_password2 = "abcdefghijklmnopqrstuvwxyz";
 				$usrtype = 1;
-				$usrlocation = $infos[2];
+				$usrlocation = ldap_escape($infos[2]);
 				$usrmail = $infos[3];
 				$usrlimitation = 0;
 
