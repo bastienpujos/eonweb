@@ -124,6 +124,7 @@
 	"label.admin_user.title_upd": "User settings",
 	"label.admin_user.user_cacti": "Cacti user",
 	"label.admin_user.user_desc": "User description",
+	"label.admin_user.user_defaultpage": "Choose the home page",
 	"label.admin_user.user_group": "Group",
 	"label.admin_user.user_lang": "Choose a language",
 	"label.admin_user.user_lang_en": "English",

@@ -36,7 +36,6 @@ if(isset($_GET["module"]) && isset($_GET["link"])) {
 	
 include("../header.php"); 
 include("../side.php"); 
-
 ?>
 
 <div id="page-wrapper">
