@@ -78,6 +78,7 @@ if( strpos($_SERVER["PHP_SELF"], "/module/module_frame") !== false ){
 		// create the top navbar menu
 		if(isset($navbar_menus["navbarlink"])){
 			foreach ($navbar_menus["navbarlink"] as $navbarlink) {
+
 		?>
 				<li><a href="/module/module_frame/index.php?url=<?php echo urlencode($navbarlink["url"]); ?>"><?php echo getLabel($navbarlink["name"]); ?></a></li>
 		<?php

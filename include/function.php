@@ -917,13 +917,12 @@ function getDefaultPage($usrlimit=0){
 	
 	$user_id = mysqli_result(sqlrequest("$database_eonweb","SELECT user_id FROM users WHERE user_name='".strtolower($_POST['login'])."'"),0);
 	$tempDefaultpage = mysqli_result(sqlrequest("$database_eonweb","SELECT user_defaultpage FROM users WHERE user_id='".$user_id."'"),0);
-	
-	if($tempDefaultpage != 0){
+
+	if($tempDefaultpage != '0'){
 		$defaultpage = $tempDefaultpage;
 	}
 	
 	return $defaultpage;
-
 }
 
 // get frame url

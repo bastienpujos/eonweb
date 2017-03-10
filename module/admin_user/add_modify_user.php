@@ -448,11 +448,11 @@ include("../../side.php");
 			<label class="col-md-3"><?php echo getLabel("label.admin_user.user_defaultpage"); ?></label>
 			<div class="col-md-9">
 				<?php 
-		// Display user language selection  
-				var_dump($menus);
 				
+		// Display user language selection  
 				$userLim = mysqli_result(sqlrequest("$database_eonweb","SELECT user_limitation FROM users WHERE user_id='".$user_id."'"),0);
 				$userDefaultpage = mysqli_result(sqlrequest("$database_eonweb","SELECT user_defaultpage FROM users WHERE user_id='".$user_id."'"),0);
+				$groupID = mysqli_result(sqlrequest("$database_eonweb","SELECT group_id FROM users WHERE user_id='".$user_id."'"),0);
 				
 				$m = new Translator();
 				// load right menu file according to user limitation (LEFT menu)
@@ -462,44 +462,62 @@ include("../../side.php");
 					$m->initFile($path_menus,$path_menus_custom);
 				}
 				$menus = $m->createPHPDictionnary();
-
+				
 				// creation of a select and catch values
 				$res = '<select class="form-control" name="user_defaultpage">';
 				if(isset($menus["menutab"])){
 					foreach($menus["menutab"] as $menutab){
+						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$groupID.";";
+						$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
+						if($tab_right == 0){ continue; }
+						
 						if(isset($menutab["link"])){
 							foreach($menutab["link"] as $menulink) {
-								/*if($menulink["url"] == getDefaultPage()){
+								$page=$menulink["url"];
+								if($menulink["target"]=="frame") { $page=$path_frame.urlencode($menulink['url']); }
+								if($page == $userDefaultpage){
 									$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menutab["name"])."->".getLabel($menulink["name"])."</option>";
 								}
-								else{*/
-									$res.="<option value='".$menulink["url"]."'>".getLabel($menutab["name"])."->".getLabel($menulink["name"])."</option>";
-								//}
+								else{
+									$res.="<option value='".$page."'>".getLabel($menutab["name"])."->".getLabel($menulink["name"])."</option>";
+								}
 							}
 						}
 						if(isset($menutab["menusubtab"])){
 							foreach($menutab["menusubtab"] as $menusubtab) {
 									foreach($menusubtab["link"] as $menulink) {
-										/*if($menulink["url"] == getDefaultPage()){
+										$page=$menulink["url"];
+										if($menulink["target"]=="frame") { $page=$path_frame.urlencode($menulink['url']); }
+									
+										if($page == $userDefaultpage){
 											$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menutab["name"])."->".getLabel($menusubtab["name"])."->".getLabel($menulink["name"])."</option>";
 										}
-										else{*/
-											$res.="<option value='".$menulink["url"]."'>".getLabel($menutab["name"])."->".getLabel($menusubtab["name"])."->".getLabel($menulink["name"])."</option>";
-										//}
+										else{
+											$res.="<option value='".$page."'>".getLabel($menutab["name"])."->".getLabel($menusubtab["name"])."->".getLabel($menulink["name"])."</option>";
+										}
 									}
 							}
 						}
 					}
 				}
 				else{
-					if(isset($menus["link"])){
-						foreach($menus["link"] as $menulink) {
-							/*if($menulink["url"] == getDefaultPage()){
-								$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menulink["name"])."</option>";
+					foreach($menus["menutab"] as $menutab){
+						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$groupID.";";
+						$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
+						if($tab_right == 0){ continue; }
+						
+						if(isset($menus["link"])){
+							foreach($menus["link"] as $menulink) {
+								$page=$menulink["url"];
+								if($menulink["target"]=="frame") { $page=$path_frame.urlencode($menulink['url']); }
+								
+								if($page == $userDefaultpage){
+									$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menulink["name"])."</option>";
+								}
+								else{
+									$res.="<option value='".$page."'>".getLabel($menulink["name"])."</option>";
+								}
 							}
-							else{*/
-								$res.="<option value='".$menulink["url"]."'>".getLabel($menulink["name"])."</option>";
-							//}
 						}
 					}
 				}

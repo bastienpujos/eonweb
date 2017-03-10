@@ -242,8 +242,6 @@ else {
 
 			// Go to the main page
 			logging("login","User logged in",$login);
-			echo "Voila la page d'accueil : ".getDefaultPage($usrlimit);
-			sleep(20);
 			echo "<meta http-equiv='Refresh' content='0;URL=".getDefaultPage($usrlimit)."' />";
 		}
 		else { display_login(); }

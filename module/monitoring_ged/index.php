@@ -109,7 +109,6 @@ if(file_exists($file)){
 					} else {
 						$link = $default;
 					}
-					
 				}
 				?>
 				<span id="filter-info">(<?php echo getLabel("label.using_filter"); ?> : <?php echo $link ?>)</span>
