@@ -463,8 +463,8 @@ include("../../side.php");
 				}
 				$menus = $m->createPHPDictionnary();
 				
-				// creation of a select and catch values
-				$res = '<select class="form-control" name="user_defaultpage">';
+				// creation of a autocomplete with all values that are possible
+				$res2 = "<input id='user_defaultpage' class='form-control' type='text' name='user_defaultpage' onFocus='$(this).autocomplete({source: [";
 				if(isset($menus["menutab"])){
 					foreach($menus["menutab"] as $menutab){
 						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$groupID.";";
@@ -473,28 +473,15 @@ include("../../side.php");
 						
 						if(isset($menutab["link"])){
 							foreach($menutab["link"] as $menulink) {
-								$page=$menulink["url"];
-								if($menulink["target"]=="frame") { $page=$path_frame.urlencode($menulink['url']); }
-								if($page == $userDefaultpage){
-									$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menutab["name"])."->".getLabel($menulink["name"])."</option>";
-								}
-								else{
-									$res.="<option value='".$page."'>".getLabel($menutab["name"])."->".getLabel($menulink["name"])."</option>";
-								}
+								if($menulink["target"]=="frame") { $res2 .= '"'.$path_frame.urlencode($menulink['url']).'",';	}
+								else{$res2 .= '"'.$menulink["url"].'",';}
 							}
 						}
 						if(isset($menutab["menusubtab"])){
 							foreach($menutab["menusubtab"] as $menusubtab) {
 									foreach($menusubtab["link"] as $menulink) {
-										$page=$menulink["url"];
-										if($menulink["target"]=="frame") { $page=$path_frame.urlencode($menulink['url']); }
-									
-										if($page == $userDefaultpage){
-											$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menutab["name"])."->".getLabel($menusubtab["name"])."->".getLabel($menulink["name"])."</option>";
-										}
-										else{
-											$res.="<option value='".$page."'>".getLabel($menutab["name"])."->".getLabel($menusubtab["name"])."->".getLabel($menulink["name"])."</option>";
-										}
+										if($menulink["target"]=="frame") { $res2 .= '"'.$path_frame.urlencode($menulink['url']).'",';	}
+										else{$res2 .= '"'.$menulink["url"].'",';}
 									}
 							}
 						}
@@ -508,21 +495,17 @@ include("../../side.php");
 						
 						if(isset($menus["link"])){
 							foreach($menus["link"] as $menulink) {
-								$page=$menulink["url"];
-								if($menulink["target"]=="frame") { $page=$path_frame.urlencode($menulink['url']); }
-								
-								if($page == $userDefaultpage){
-									$res.="<option value='".$menulink["url"]."' selected=selected>".getLabel($menulink["name"])."</option>";
-								}
-								else{
-									$res.="<option value='".$page."'>".getLabel($menulink["name"])."</option>";
-								}
+								$res2 .= '"'.$menulink["url"].'",';
+								if($menulink["target"]=="frame") { $res2 .= '"'.$path_frame.urlencode($menulink['url']).'",';		}
+								else{$res2 .= '"'.$menulink["url"].'",';}
 							}
 						}
 					}
 				}
-				$res .= '</select>';
-				echo $res;
+				$res2 = rtrim($res2, ",");
+				$res2 .= "]})'>";
+				
+				echo 	$res2;
 				?>
 			</div>
 		</div>
