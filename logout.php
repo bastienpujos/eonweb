@@ -2,9 +2,9 @@
 /*
 #########################################
 #
-# Copyright (C) 2016 EyesOfNetwork Team
+# Copyright (C) 2017 EyesOfNetwork Team
 # DEV NAME : Jean-Philippe LEVY
-# VERSION : 5.1
+# VERSION : 5.2
 # APPLICATION : eonweb for eyesofnetwork project
 #
 # LICENCE :
@@ -25,7 +25,7 @@ include("header.php");
 logging("logout","User logged out");
 if(isset($_COOKIE["session_id"])) { 
 	$sessid=$_COOKIE["session_id"]; 
-	sqlrequest($database_eonweb,"DELETE FROM sessions where session_id='$sessid'");
+	sqlrequest($database_eonweb,"DELETE FROM sessions where session_id=?",false,array("s",(string)$sessid));
 }
 setcookie("session_id",FALSE);
 setcookie("user_name",FALSE);

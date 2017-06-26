@@ -2,9 +2,9 @@
 /*
 #########################################
 #
-# Copyright (C) 2016 EyesOfNetwork Team
+# Copyright (C) 2017 EyesOfNetwork Team
 # DEV NAME : Jean-Philippe LEVY
-# VERSION : 5.1
+# VERSION : 5.2
 # APPLICATION : eonweb for eyesofnetwork project
 #
 # LICENCE :
@@ -97,7 +97,7 @@ include("../../side.php");
 			$nbr_ok = 0;
 			foreach ($_POST['import_list'] as $key => $value) {
 				$infos = explode("::", $value);
-				$usrname = $infos[0];
+				$usrname = strtolower($infos[0]);
 				$userdesc = $usrname;
 				$usergroup = $infos[1];
 				$user_password1 = "abcdefghijklmnopqrstuvwxyz";
