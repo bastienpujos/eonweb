@@ -37,19 +37,19 @@ include("../../side.php");
 		$usrid=$_COOKIE['user_id'];
 		$user_password1= "abcdefghijklmnopqrstuvwxyz";
 		$user_password2= "abcdefghijklmnopqrstuvwxyz";
-		$userDefaultpage = mysqli_result(sqlrequest("$database_eonweb","SELECT user_defaultpage FROM users WHERE user_id='".$usrid."'"),0);
+		$user_defaultpage = mysqli_result(sqlrequest("$database_eonweb","SELECT user_defaultpage FROM users WHERE user_id='".$usrid."'"),0);
 
 		if(isset($_POST["update"])) {
 			$user_password1 = retrieve_form_data("user_password1","");
 			$user_password2 = retrieve_form_data("user_password2","");
 			$user_language = retrieve_form_data("user_language","");
-			$user_page = retrieve_form_data("user_defaultpage","");
+			$user_defaultpage = retrieve_form_data("user_defaultpage","");
 			if (($user_password1 != "") && ($user_password1 != null) && ($user_password1 == $user_password2)) {
 				if($user_password1!="abcdefghijklmnopqrstuvwxyz") {
 					$user_password = md5($user_password1);
 
 					// Insert into eonweb
-					sqlrequest("$database_eonweb","UPDATE users set user_passwd='$user_password' WHERE user_id='$usrid';");
+					sqlrequest("$database_eonweb","UPDATE users set user_passwd='$user_password',user_defaultpage='$user_defaultpage' WHERE user_id='$usrid';");
 					
 					// update password into nagvis if user is in
 					$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
@@ -75,52 +75,7 @@ include("../../side.php");
 			else {
 				message(8," : ".getLabel("message.monitoring_passwd.error"),'warning');
 			}
-			if($user_language != '' || $user_language!=$langtmp){
-				sqlrequest("$database_eonweb","UPDATE users set user_language='$user_language' WHERE user_id='$usrid';");
-			}
-			if($user_page != $userDefaultpage || $user_page == '' || $user_page == '0'){
-				sqlrequest("$database_eonweb","UPDATE users set user_defaultpage='$user_page' WHERE user_id='$usrid';");
-			}
 		}	
-		
-		// Display user language selection  
-		function GetUserLang() {
-
-			global $database_eonweb;
-			global $user_id;
-			global $path_languages;
-
-			// definition of variables and Research language files
-			$path_label_lang = "label.admin_user.user_lang_"; 
-			$files = array('en');
-			$handler = opendir($path_languages);
-
-			while ($file = readdir($handler)) {
-				if(preg_match('#messages-(.+).json#', $file, $matches)){
-					$files[] = $matches[1];
-				}
-			}
-
-			closedir($handler);
-			$files = array_filter($files);
-			array_unshift($files,"0");
-			$files = array_unique($files);
-
-			// creation of a select and catch values
-			$langtmp = mysqli_result(sqlrequest("$database_eonweb","SELECT user_language FROM users WHERE user_id='".$_COOKIE['user_id']."'"),0);
-			$res = '<select class="form-control" name="user_language">';
-			foreach($files as $v) {
-				if($v == $langtmp){
-					$res.="<option value='".$v."' selected=selected>".getLabel($path_label_lang.$v)."</option>";
-				}
-				else{
-					$res.="<option value='".$v."'>".getLabel($path_label_lang.$v)."</option>";
-				}
-			}
-			$res .= '</select>';
-
-			return $res;
-		}
 	?>
 	
 	<form method='POST' name='form_user'>
@@ -143,31 +98,18 @@ include("../../side.php");
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.admin_user.user_lang"); ?></label>
 			<div class="col-md-9">
-				<?php echo GetUserLang(); ?>
+				<?php echo GetUserLang($_COOKIE["user_id"]); ?>
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.admin_user.user_defaultpage"); ?></label>
 			<div class="col-md-9">
 				<?php 
-			// Display user language selection  
-				$userLim = mysqli_result(sqlrequest("$database_eonweb","SELECT user_limitation FROM users WHERE user_id='".$usrid."'"),0);
-				$groupID = mysqli_result(sqlrequest("$database_eonweb","SELECT group_id FROM users WHERE user_id='".$usrid."'"),0);
-				
-				$m = new Translator();
-				// load right menu file according to user limitation (LEFT menu)
-				if( $userLim != 0 ){
-					$m->initFile($path_menu_limited, $path_menu_limited_custom);
-				} else {
-					$m->initFile($path_menus,$path_menus_custom);
-				}
-				$menus = $m->createPHPDictionnary();
-				
-				// creation of a autocomplete with all values that are possible
-				$res2 = "<input id='user_defaultpage' class='form-control' type='text' name='user_defaultpage' onFocus='$(this).autocomplete({source: [";
+				global $menus;
+				$res2 = "<input id='user_defaultpage' class='form-control' type='text' name='user_defaultpage' value='".$user_defaultpage."' onFocus='$(this).autocomplete({source: [";
 				if(isset($menus["menutab"])){
 					foreach($menus["menutab"] as $menutab){
-						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$groupID.";";
+						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$_COOKIE["group_id"].";";
 						$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
 						if($tab_right == 0){ continue; }
 						
@@ -188,18 +130,9 @@ include("../../side.php");
 					}
 				}
 				else{
-					foreach($menus["menutab"] as $menutab){
-						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$groupID.";";
-						$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
-						if($tab_right == 0){ continue; }
-						
-						if(isset($menus["link"])){
-							foreach($menus["link"] as $menulink) {
-								$res2 .= '"'.$menulink["url"].'",';
-								if($menulink["target"]=="frame") { $res2 .= '"'.$path_frame.urlencode($menulink['url']).'",';		}
-								else{$res2 .= '"'.$menulink["url"].'",';}
-							}
-						}
+					foreach($menus["link"] as $menulink) {
+						$res2 .= '"'.$menulink["url"].'",';
+						if($menulink["target"]=="frame") { $res2 .= '"'.$path_frame.urlencode($menulink['url']).'",';		}
 					}
 				}
 				$res2 = rtrim($res2, ",");

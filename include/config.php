@@ -115,6 +115,7 @@ $path_nagiosbpcfg_bu="/tmp/nagios-bp.conf";
 $path_nagiosbpcfg_lock="/tmp/nagios_bp";
 $path_nagiosdowntime="$path_nagios/plugins/Downtime/downtime_list.txt";
 $path_notification="$path_notifier/etc/notifier.rules";
+$path_notifier="$path_eon/notifier";
 
 // # GED
 $ged_prefix="";
@@ -124,6 +125,10 @@ $path_gedcfg="$path_ged/etc/ged.cfg";
 $path_gedhdb="$path_ged/etc/bkd/gedmysql.cfg";
 $path_gedqcfg="$path_ged/etc/gedq.cfg";
 $path_gedtcfg="$path_ged/etc/gedt.cfg";
+
+// # Notifier
+$path_notifier_rules="$path_notifier/etc/notifier.rules";
+$path_notifier_methods="$path_notifier/etc/notifier.cfg";
 
 // # Net-SNMP
 $path_snmpwalk="/usr/bin/snmpwalk";
