@@ -136,6 +136,7 @@ include("../../side.php");
 					}
 				}
 				$res2 = rtrim($res2, ",");
+				$res3=$res2;
 				$res2 .= "]})'>";
 				
 				echo 	$res2;
